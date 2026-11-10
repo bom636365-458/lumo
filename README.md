@@ -1,4 +1,4 @@
-# BOM STUDIO
+# KIM BOMI
 
 영어 교육·콘텐츠 포트폴리오 (모바일 우선, PC 대응).
 
