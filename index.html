@@ -270,7 +270,7 @@ footer p{margin-top:20px;font-size:12px;color:#8b78a8}
 .lbd{display:flex;gap:7px;margin-top:14px}
 .lbd i{width:7px;height:7px;border-radius:99px;background:rgba(255,255,255,.3);transition:.3s}
 .lbd i.on{width:22px;background:var(--lime)}
-.shot,.ph1,.lec>div,.dth{cursor:zoom-in}
+.shot,.ph1,.dth{cursor:zoom-in}
 .tip{margin-top:12px;font-weight:700;color:var(--p);font-size:14px;min-height:21px}
 .chart .hit{cursor:pointer}
 .dth{position:relative;border-radius:18px;overflow:hidden;margin-bottom:14px;max-height:230px;display:flex;justify-content:center;background:var(--pl)}
@@ -488,8 +488,8 @@ const CONFIG={
     {cat:'stat',k:'blog',tag:'DATA',name:'블로그 성장 기록 (10/30~11/8)',desc:'10/30부터 11/8까지, 하루 21회에서 최고 1,539회로',act:'→ 조회수 그래프 보기',ph:['1,539','#8816E1','#3a0866'],flag:'실제 데이터',go:'stat'}
   ],
   works:[
-    {title:'Cell Studio',sub:'눈으로 보며 쉽게 하는 과학',img:'cell_22',shot:'cell_2',badge:'체험 가능',q:'세포 구조를 그림 한 장으로 파악하기 어려웠다',d:'모델을 돌리고 부위를 선택하면 이름과 설명이 나오도록 설계했다',t:'직접 돌려보기',scope:'기획 · 화면 설계 · 제작 전체',url:'https://science-lab-kr.netlify.app/',cta:'3D 세포 돌려보기'},
-    {title:'스쿨 플래너',sub:'수행·대회·동아리 일정',img:'cap_school',zoom:[1.35,'45% 0%'],badge:'실제 사용 중',q:'수행평가·대회·동아리 일정이 흩어져 있어 놓치기 쉬웠다',d:'한 달 달력에 종류별 색으로 모아 한눈에 구분되도록 설계했다',t:'지금 쓰이는 사이트를 직접 열어보기',scope:'기획 · 화면 설계 · 제작 전체',url:'https://ds35.netlify.app/',cta:'일정 사이트 열어보기'},
+    {title:'Cell Studio',sub:'눈으로 보며 쉽게 하는 과학',img:'cell_22',shot:'cell_2',badge:'체험 가능',q:'과학을 글로만 보기 어려웠음',d:'입체적, 동작형으로 설계',t:'조작형으로 직접 가능하게 함',url:'https://science-lab-kr.netlify.app/',cta:'바로가기'},
+    {title:'스쿨 플래너',sub:'수행·대회·동아리 일정',img:'cap_school',zoom:[1.35,'45% 0%'],badge:'실제 사용 중',q:'수행평가·대회·동아리 일정이 흩어져 있어 놓치기 쉬웠다',d:'나이스 교육청 API연동, 사진 OCR기능, 일정관리',t:'실제 학교 학급에서 쓰고 있음',url:'https://ds35.netlify.app/',cta:'일정 사이트 열어보기'},
     {title:'캐릭터 영상',sub:'AI로 만든 3D 캐릭터',img:'vid_char',badge:'영상 재생',q:'캐릭터가 움직이는 영상은 촬영과 작화 부담이 커서 시도하기 어려웠다',d:'AI로 캐릭터를 만들고 움직여, 짧은 영상 한 편으로 완성했다',t:'영상 재생',scope:'기획 · 제작 전체',item:'캐릭터 영상',cta:'영상 재생'}
   ],
   areas:[
@@ -587,7 +587,7 @@ function shots(){
 function reel(){
   return `<div class="reel rv"><div class="hs">${GROUPS.reel.map(([k,c],i)=>`<div class="ph1" data-lb="reel" data-i="${i}"><img src="${IMG[k]}" alt="${c}" loading="lazy"></div>`).join('')}</div></div>`;
 }
-function lecture(){return `<div class="lec rv">${GROUPS.lec.map(([k,c],i)=>`<div data-lb="lec" data-i="${i}"><img src="${IMG[k]}" alt="${c}" loading="lazy"></div>`).join('')}</div>`}
+function lecture(){return `<div class="lec rv">${GROUPS.lec.map(([k,c],i)=>`<div><img src="${IMG[k]}" alt="${c}" loading="lazy"></div>`).join('')}</div>`}
 function areaPanel(){
   const a=CONFIG.areas[areaI];
   return `<div class="area" id="areaP"><div class="ai" style="background-image:${im(a.img)}"></div><div class="at"><h4 class="disp">${a.name}</h4><p>${a.desc}</p><div class="chips">${a.chips.map(c=>`<span>#${c}</span>`).join('')}</div><button class="go2" data-go="${a.cat}" data-key="${a.key}">작업 보기 <span>→</span></button></div></div>`;
@@ -712,13 +712,14 @@ const MP4OK=HOST||location.protocol==='file:';
 const ext=(i,href)=>`<a class="dv ${(i.yt||i.vp)?'pt ':''}xv" href="${href}" target="_blank" rel="noopener"><img src="${IMG[i.img]}" alt="${i.name}"><span class="bigplay">▶</span><em>${i.yt?'유튜브에서 재생':'영상 열기'} ↗</em></a>`;
 function openWork(n){
   const w=CONFIG.works[n];
+  if(w.item){openDetail(CONFIG.items.findIndex(x=>x.name===w.item));return}
   const stl=w.zoom?` style="scale:${w.zoom[0]};transform-origin:${w.zoom[1]}"`:'';
   const act=w.url?`<a class="b1 wide" href="${w.url}" target="_blank" rel="noopener">${w.cta} →</a>`:`<button class="b1 wide" data-d="${CONFIG.items.findIndex(x=>x.name===w.item)}">${w.cta} →</button>`;
   $('#dsheet').className='sheet';
   openBox('#dsheet',`<div class="dth wkimg"><img src="${IMG[w.img]}" alt="${w.title}"${stl}><span class="zoom">${w.badge}</span></div>
     <span class="tg2">대표작</span><h4 class="disp">${w.title}</h4>
     <ol class="wl"><li><b>문제</b><span>${w.q}</span></li><li><b>설계</b><span>${w.d}</span></li><li><b>체험</b><span>${w.t}</span></li></ol>
-    <p class="scope">맡은 범위 · ${w.scope}</p>
+    ${w.scope?`<p class="scope">맡은 범위 · ${w.scope}</p>`:''}
     <div class="row">${act}</div><div class="row"><button class="b2" id="dclose">닫기</button></div>`);
 }
 function openDetail(idx){
